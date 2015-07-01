@@ -1,5 +1,6 @@
 <?php
 
 //top menu bar
-
-echo "menu <br />";
+echo "<div id='menu'>";
+echo "<a href='index.php'>home</a> <br />";
+echo "</div>";

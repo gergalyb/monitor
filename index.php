@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <meta charset="utf-8">
 </head>
 <?php
 session_start();

@@ -1,0 +1,36 @@
+#mainContent{
+  position: fixed;
+    top: 100px;
+    right: 0px;
+    bottom: 0px;
+    left: 200px;
+  overflow: auto;
+  background-color: rgb(163, 163, 163);
+}
+
+#menu{
+  position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    height: 100px;
+  background-color: rgb(165, 221, 219);
+}
+
+#sidebar{
+  position: fixed;
+    top: 100px;
+    left: 0px;
+    bottom: 0px;
+    width: 200px;
+  overflow: auto;
+  background-color: rgb(214, 200, 164);
+}
+
+.view{
+  display: inline-block;
+  width: 196px;
+  border-style: solid;
+  border-width: 2px;
+    border-color: rgb(254, 124, 124);
+}
