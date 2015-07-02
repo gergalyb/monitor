@@ -8,25 +8,24 @@ require './config/conn.php';
 
 echo "<div class='view'>";
 
-echo "<form method='get' action=" . $_SERVER['PHP_SELF'] . ">
+echo "<form method='post' action=" . $_SERVER['PHP_SELF'] . ">
     <input type='text' name='date' placeholder='yyyy-mm-dd'>
     <input type='submit' name='submit'>
   </form>";
 
-if (!empty($_GET['submit'])) {
+if (!empty($_POST['submit'])) {
+  $date = $_POST['date']; //to be sanitized!
   $sql = "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
   from BNDOCEX2TLOG
   where
-  StartTime > ('2015-04-20') and
-  StartTime < dateadd(d,1,('2015-04-20'))
+  StartTime > '$date' and
+  StartTime < dateadd(d,1,'$date')
   group by right(cTriggerName,2) , cState";
-  $date = $_GET['date'];
-  $stmt = sqlsrv_query($conn,$sql,array($date, $date));
-  print_r($stmt);
+
+  $stmt = sqlsrv_query($conn, $sql);
   if ($stmt === false) {
   die(print_r(sqlsrv_errors(), true));
   }
-
   $_SESSION['result'] = $stmt;
 }
 
