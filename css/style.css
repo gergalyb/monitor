@@ -34,3 +34,14 @@
   border-width: 2px;
     border-color: rgb(254, 124, 124);
 }
+
+#table{
+  width: 100%;
+  text-align: center;
+}
+#table tr:nth-child(even){
+  background-color: #fff;
+}
+#table tr:nth-child(odd){
+  background-color: #ddd;
+}
