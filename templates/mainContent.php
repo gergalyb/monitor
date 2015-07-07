@@ -2,21 +2,15 @@
 echo "<div id='mainContent'>";
 echo "info: mainContent <br />";
 
-if (!empty($stmt)) { //not working correctly
-    echo "<form method='post' action=" . $_SERVER['PHP_SELF'] . ">";
-        echo "<input type='submit' value='Letöltés' name='export'>";
-    echo "</form>";
-    //echo "<a href='./templates/xlsExport.php'>Letöltés</a><br />";
+if (!empty($_POST['submit'])) { //not working correctly
+    echo "<a href='./templates/xlsExport.php'>Letöltés</a><br />";
 
-    /*if (!empty($_POST['export'])) {
-        echo "exporting";
-        //require './templates/xlsExport.php';
+    $stmt = sqlsrv_query($conn, $sql, $params);
+    if ($stmt === false) {
+    die(print_r(sqlsrv_errors(), true));
     }
-    else {
-        echo "not exporting";
-    }*/
 
-    require './classes/PHPExcel.php';
+    /*require './classes/PHPExcel.php';
     $xls = new PHPExcel();
     $xls->setActiveSheetIndex(0)
         ->setCellValue('A1','test a1')
@@ -27,7 +21,7 @@ if (!empty($stmt)) { //not working correctly
     header('Content-Disposition: attachment;filename="01simple.xls"');
     header('Cache-Control: max-age=0');
     $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
-    $objWriter->save('php://output');
+    $objWriter->save('php://output');*/
 
 
     echo "<table id='table'>";

@@ -1,8 +1,9 @@
 <?php
 
-//sidebar: list of possible queries (views)
+//sidebar: list of possible queries
 echo "<div id='sidebar'>";
 echo "info: sidebar <br />";
-require './views/test.php';
-require './views/test2.php';
+require './queries/test.php';
+require './queries/test2.php';
 echo "</div>";
+?>

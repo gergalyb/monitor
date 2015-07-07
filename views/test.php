@@ -15,12 +15,7 @@ if (!empty($_POST['submit'])) {
   StartTime > ? and
   StartTime < dateadd(d,1,?)
   group by right(cTriggerName,2) , cState";
-  //print_r($_GET['date']);
-  $stmt = sqlsrv_query($conn, $sql, array($date, $date));
-  if ($stmt === false) {
-  die(print_r(sqlsrv_errors(), true));
-  }
-  //print_r($stmt)
+  $params = array($date, $date);
 }
 
 echo "</div>";
