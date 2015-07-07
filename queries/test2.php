@@ -13,7 +13,7 @@ echo "<form method='post' action=" . $_SERVER['PHP_SELF'] . ">
     <input type='submit' name='submit'>
   </form>";
 
-if (!empty($_POST['submit'])) {
+/*if (!empty($_POST['submit'])) {
   $date = $_POST['date']; //to be sanitized!
   $sql = "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
   from BNDOCEX2TLOG
@@ -27,7 +27,7 @@ if (!empty($_POST['submit'])) {
   die(print_r(sqlsrv_errors(), true));
   }
   $_SESSION['result'] = $stmt;
-}
+}*/
 
 echo "</div>";
 

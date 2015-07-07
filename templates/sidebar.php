@@ -3,7 +3,13 @@
 //sidebar: list of possible queries
 echo "<div id='sidebar'>";
 echo "info: sidebar <br />";
-require './queries/test.php';
-require './queries/test2.php';
+
+require './queries.php';
+
+foreach ($queries as $objQuery) {
+    echo count($objQuery->params);
+    echo ",";
+}
+
 echo "</div>";
 ?>

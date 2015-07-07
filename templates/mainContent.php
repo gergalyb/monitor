@@ -3,7 +3,7 @@ echo "<div id='mainContent'>";
 echo "info: mainContent <br />";
 
 if (!empty($_POST['submit'])) { //not working correctly
-    echo "<a href='./templates/xlsExport.php'>Letöltés</a><br />";
+    echo "<a href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=".base64_encode(json_encode($params))."'>Letöltés</a><br />";
 
     $stmt = sqlsrv_query($conn, $sql, $params);
     if ($stmt === false) {
