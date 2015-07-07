@@ -1,9 +1,4 @@
 <?php
-
-//different script for each view
-//datepicker, dropdowns, submit button in each different view script
-//only run when submit is pressed
-
 require './config/conn.php';
 
 echo "<div class='view'>";
@@ -13,7 +8,7 @@ echo "<form method='post' action=" . $_SERVER['PHP_SELF'] . ">
     <input type='submit' name='submit' value='a'>
   </form>";
 if (!empty($_POST['submit'])) {
-  $date = (string)$_POST['date']; //to be sanitized!
+  $date = (string)$_POST['date'];
   $sql = "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
   from BNDOCEX2TLOG
   where
@@ -25,8 +20,7 @@ if (!empty($_POST['submit'])) {
   if ($stmt === false) {
   die(print_r(sqlsrv_errors(), true));
   }
-  //print_r($stmt);
-  $_SESSION['result'] = $stmt;
+  //print_r($stmt)
 }
 
 echo "</div>";
@@ -34,3 +28,4 @@ echo "</div>";
 /*while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
   echo $row['Darab'] . ", " . $row['Status'] . ", " . $row['DepotCode'] . "<br />";
 }*/
+?>
