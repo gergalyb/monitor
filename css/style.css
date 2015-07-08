@@ -1,9 +1,9 @@
 #mainContent{
   position: fixed;
-    top: 100px;
+    top: 0px;
     right: 0px;
     bottom: 0px;
-    left: 200px;
+    left: 300px;
   overflow: auto;
   background-color: rgb(163, 163, 163);
 }
@@ -11,8 +11,8 @@
 #menu{
   position: fixed;
     top: 0px;
-    right: 0px;
     left: 0px;
+    width: 300px;
     height: 100px;
   background-color: rgb(165, 221, 219);
 }
@@ -22,12 +22,12 @@
     top: 100px;
     left: 0px;
     bottom: 0px;
-    width: 200px;
+    width: 300px;
   overflow: auto;
   background-color: rgb(214, 200, 164);
 }
 
-.view{
+form{
   display: inline-block;
   width: 196px;
   border-style: solid;

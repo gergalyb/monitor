@@ -1,34 +1,41 @@
 <?php
 echo "<div id='mainContent'>";
-echo "info: mainContent <br />";
 
-if (!empty($_POST['submit'])) { //not working correctly
-    echo "<a href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=".base64_encode(json_encode($params))."'>Letöltés</a><br />";
+$i = 0;
+$submitted = false;
+foreach ($queries as $objQuery) {
+    if (!empty($_POST[$objQuery->name])){
+        $submitted = true;
+        $sqlID = $i;
+    }
+    $i++;
+}
+
+if ($submitted == true) {
+    $sql = $queries[$sqlID]->sql;
+    $i = 0;
+    $params = array();
+    foreach (array_keys($queries[$sqlID]->params) as $param) {
+        $params[$i] = $_POST[$param];
+        $i++;
+    }
+    //var_dump($sql);
+    //var_dump($_POST);
+    //var_dump($params);
 
     $stmt = sqlsrv_query($conn, $sql, $params);
     if ($stmt === false) {
     die(print_r(sqlsrv_errors(), true));
     }
-
-    /*require './classes/PHPExcel.php';
-    $xls = new PHPExcel();
-    $xls->setActiveSheetIndex(0)
-        ->setCellValue('A1','test a1')
-        ->setCellValue('A2','test a2')
-        ->setCellValue('B1','test b1')
-        ->setCellValue('B2','test b2');
-    header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="01simple.xls"');
-    header('Cache-Control: max-age=0');
-    $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
-    $objWriter->save('php://output');*/
-
+    $metadata = sqlsrv_field_metadata($stmt);
+    
+    echo "<a href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=".base64_encode(json_encode($params))."'>Letöltés</a><br />";
 
     echo "<table id='table'>";
         echo "<tr>";
-            echo "<th>" . "Darab" . "</th>";
-            echo "<th>" . "Status" . "</th>";
-            echo "<th>" . "DepotCode" . "</th>";
+            foreach ($metadata as $columnMeta) {
+                echo "<th>" . $columnMeta['Name'] . "</th>";
+            }
         echo "</tr>";
 
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
@@ -37,10 +44,8 @@ if (!empty($_POST['submit'])) { //not working correctly
             echo "</tr>";
         }
         echo "</table>";
-}   elseif (isset($_SESSION['result']) && $_SESSION['result'] == 0) {
-        echo "<b>Nincs találat!</b>";
-}   else {
-        echo "<b>Az eredmények itt fognak megjelleni</b>";
+} else {
+    echo "<b>Az eredmények itt fognak megjelleni.</b>";
 }
 echo "</div>";
 ?>
