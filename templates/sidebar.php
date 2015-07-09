@@ -30,8 +30,7 @@ foreach ($queries as $objQuery) {
         foreach ($paramsKeys as $key) {
             if ($objQuery->params[$key] == "date"){
                 $contentNormal = $contentNormal . "<div class='date-input'>";
-                    $contentNormal = $contentNormal . "<label for=" . $key . ">" . $key . "</label>";
-                    $contentNormal = $contentNormal . "<input type='text' type='text' class='form-control' id='date-input' name=" . $key . " id=" . $key . ">";
+                    $contentNormal = $contentNormal . "<input type='text' type='text' class='form-control floating-label' placeholder='$key' id='date-input' name=" . $key . " id=" . $key . ">";
                 $contentNormal = $contentNormal . "</div>";
             }
             else {
@@ -47,8 +46,7 @@ foreach ($queries as $objQuery) {
         foreach ($paramsKeys as $key) {
             if ($objQuery->params[$key] == "date"){
                 $contentQuick = $contentQuick . "<div class='date-input'>";
-                    $contentQuick = $contentQuick . "<label for=" . $key . ">" . $key . "</label>";
-                    $contentQuick = $contentQuick . "<input type='text' type='text' class='form-control' id='date-input' name=" . $key . " id=" . $key . ">";
+                    $contentQuick = $contentQuick . "<input type='text' type='text' class='form-control floating-label' placeholder='$key' id='date-input' name=" . $key . " id=" . $key . ">";
                 $contentQuick = $contentQuick . "</div>";
             }
             else {
