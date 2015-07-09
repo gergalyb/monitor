@@ -3,7 +3,7 @@
     top: 0px;
     right: 0px;
     bottom: 0px;
-    left: 300px;
+    left: 400px;
   overflow: auto;
   padding: 15px;
 }
@@ -12,7 +12,7 @@
   position: fixed;
     top: 0px;
     left: 0px;
-    width: 300px;
+    width: 400px;
     height: 100px;
   background-color: rgb(165, 221, 219);
 }
@@ -22,7 +22,7 @@
     top: 100px;
     left: 0px;
     bottom: 0px;
-    width: 300px;
+    width: 400px;
   overflow: auto;
   background-color: rgb(214, 200, 164);
 }
