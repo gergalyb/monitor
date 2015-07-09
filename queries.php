@@ -40,8 +40,8 @@ $test2 = new query();
     );
 
 $test3 = new query();
-    $test3->id = 0;
-    $test3->name = "testQuery";
+    $test3->id = 2;
+    $test3->name = "testQuery3";
     $test3->sql =
         "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
         from BNDOCEX2TLOG
@@ -56,8 +56,8 @@ $test3 = new query();
     );
 
 $test4 = new query();
-    $test4->id = 0;
-    $test4->name = "testQuery";
+    $test4->id = 3;
+    $test4->name = "testQuery4";
     $test4->sql =
         "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
         from BNDOCEX2TLOG
