@@ -8,6 +8,8 @@
 <head>
     <meta charset="utf-8">
 
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap/material/css/material-fullpalette.css">
@@ -22,8 +24,10 @@
     <script type="text/javascript" src="./bootstrap/material/js/ripples.min.js"></script>
     <script type="text/javascript" src="./bootstrap/datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="./bootstrap/datepicker/locales/bootstrap-datepicker.hu.min.js"></script>
+
+    <title>Dreher üzenetforgalom monitoring</title>
 </head>
-<body onload="">
+<body>
 
 <?php
 require './config/conn.php';

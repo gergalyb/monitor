@@ -1,8 +1,15 @@
 <?php
 
 //top menu bar
-echo "<div id='menu'>";
-    echo "<a href='index.php' class='mdi-action-home'></a>";
-    echo "<b style='font-size:50px'>Dreher Logo</b>";
-echo "</div>";
+
+echo "
+<div id='menu'>
+    <div id='logo'>
+        <a href='./index.php'><img src='./dreher_logo.png' alt='Dreher' width='75px' height='46px'></a>
+    </div>
+    <div id='title'>
+        <h4 class='title'>Dreher üzenetforgalom monitoring</h4>
+    </div>
+</div>
+";
 ?>
