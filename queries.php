@@ -32,8 +32,8 @@ $test2 = new query();
         "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
         from BNDOCEX2TLOG
         where
-        StartTime > 2015-04-20 and
-        StartTime < dateadd(d,1,2015-04-20)
+        StartTime > '2015-04-20' and
+        StartTime < dateadd(d,1,'2015-04-20')
         group by right(cTriggerName,2) , cState";
     $test2->category = "quick";
 

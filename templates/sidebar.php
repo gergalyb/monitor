@@ -19,44 +19,40 @@ function makeAccordionElement($id, $title, $content){
   </div>";
 }
 
+function makeQueryElement ($category){
+    global $output;
+    global $objQuery;
+    global $paramsKeys;
+    global $paramsPublicName;
+    if (!isset($output[$category])){
+        $output[$category] = "";
+    }
+    $output[$category] = $output[$category] . "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
+    $output[$category] = $output[$category] . "<h4>" . $objQuery->publicName . "</h4>";
+    foreach ($paramsKeys as $key) {
+        if ($objQuery->params[$key] == "date"){
+            $output[$category] = $output[$category] . "<div class='date-input form-group'>";
+                $output[$category] = $output[$category] . "<input type='text' type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key' id='$key'>";
+            $output[$category] = $output[$category] . "</div>";
+        }
+    }
+    $output[$category] = $output[$category] . "<input type='submit' value='Lekérdezés indítása' class='btn btn-flat btn-default' name='$objQuery->name'>";
+    $output[$category] = $output[$category] . "</form>";
+}
+
 echo "<div id='sidebar'>";
     echo "<div class='panel-group' id='accordion' role='tablist' aria-multiselectable='true'>";
-$contentQuick = "";
-$contentNormal = "";
+
+$output = array();
 
 foreach ($queries as $objQuery) {
     $paramsKeys = array_keys($objQuery->params);
-
-    if ($objQuery->category == "normal"){
-        $contentNormal = $contentNormal . "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
-        $contentNormal = $contentNormal . "<legend>" . $objQuery->publicName . "</legend>";
-        foreach ($paramsKeys as $key) {
-            if ($objQuery->params[$key] == "date"){
-                $contentNormal = $contentNormal . "<div class='date-input form-group'>";
-                    $contentNormal = $contentNormal . "<input type='text' type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key' id='$key'>";
-                $contentNormal = $contentNormal . "</div>";
-            }
-        }
-        $contentNormal = $contentNormal . "<input type='submit' value='Lekérdezés indítása' class='btn btn-flat btn-default' name='$objQuery->name'>";
-        $contentNormal = $contentNormal . "</form>";
-    }
-
-    if ($objQuery->category == "quick"){
-        $contentQuick = $contentQuick . "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
-        $contentQuick = $contentQuick . "<legend>$objQuery->publicName</legend>";
-        foreach ($paramsKeys as $key) {
-            if ($objQuery->params[$key] == "date"){
-                $contentQuick = $contentQuick . "<div class='date-input form-group'>";
-                    $contentQuick = $contentQuick . "<input type='text' type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key' id='$key'>";
-                $contentQuick = $contentQuick . "</div>";
-            }
-        }
-        $contentQuick = $contentQuick . "<input type='submit' value='Lekérdezés indítása' class='btn btn-flat btn-default' name='$objQuery->name'>";
-        $contentQuick = $contentQuick . "</form>";
-    }
+    makeQueryElement($objQuery->category);
 }
-makeAccordionElement("quick", "Gyors lekérdezések", $contentQuick);
-makeAccordionElement("normal", "Normális lekérdezések", $contentNormal);
+foreach ($output as $outputKey => $outputValue) {
+    makeAccordionElement($outputKey, $categoryPublicName[$outputKey], $outputValue);
+}
+
     echo "</div>";
 echo "</div>";
 ?>
