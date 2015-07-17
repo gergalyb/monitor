@@ -32,7 +32,12 @@ function makeQueryElement ($category){
     foreach ($paramsKeys as $key) {
         if ($objQuery->params[$key] == "date"){
             $output[$category] = $output[$category] . "<div class='date-input form-group'>";
-                $output[$category] = $output[$category] . "<input type='text' type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key' id='$key'>";
+                $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key'>";
+            $output[$category] = $output[$category] . "</div>";
+        }
+        elseif ($objQuery->params[$key] == "text") {
+            $output[$category] = $output[$category] . "<div class='form-group'>";
+                $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
             $output[$category] = $output[$category] . "</div>";
         }
     }
