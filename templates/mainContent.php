@@ -11,17 +11,75 @@ foreach ($queries as $objQuery) {
     $i++;
 }
 
+
 if ($submitted == true) {
-    $sql = $queries[$sqlID]->sql;
-    $i = 0;
-    $params = array();
-    foreach (array_keys($queries[$sqlID]->params) as $param) {
-        $params[$i] = $_POST[$param];
-        $i++;
+    if ($sqlID == count($queries)-1){
+        $params = array();
+        $sql = "select
+                cMsgID, cDocType, cOriginalFilename, cSubAddress1, cRecipientID, cSenderID , cStatus, cStatusDateTime
+                from tMessages
+                where";
+            if ($_POST["cMsgID"] != "") {
+                $sql .= " cMsgID=? AND";
+                $params[] = $_POST["cMsgID"];
+            }
+            if ($_POST["cDocType"] != "") {
+                $sql .= "cDocType =? AND";
+                $params[] = $_POST["cDocType"];
+            }
+            if ($_POST["cOriginalFilename"] != "") {
+                $data = explode("\n", $_POST["cOriginalFilename"]);
+                var_dump($data);
+                    if (count($data) == 1) {
+                        $sql .= " (cOriginalFilename LIKE '%'+?+'%')";
+                        $params[] = $data[0];
+                    } else {
+                        $sql .= " (";
+                        foreach ($data as $dataElement) {
+                            $sql .= "cOriginalFilename LIKE %?% OR ";
+                            $params = $dataElement;
+                        }
+                        $sql .= "false)";
+                    }
+            }
+            if ($_POST["cSubAddress1"] != "") {
+                $sql .= " cSubAddress1=? AND";
+                $params[] = $_POST["cSubAddress1"];
+            }
+            if ($_POST["cRecipientID"] != "") {
+                $sql .= " cRecipientID=? AND";
+                $params[] = $_POST["cRecipientID"];
+            }
+            if ($_POST["cSenderID"] != "") {
+                $sql .= " cSenderID=? AND";
+                $params[] = $_POST["cSenderID"];
+            }
+            if ($_POST["cStatus"] != "") {
+                $sql .= " cStatus=? AND";
+                $params[] = $_POST["cStatus"];
+            }
+            if ($_POST["cStatusDateTimeFROM"] != "") {
+                $sql .= " cStatusDateTimeFROM=? AND";
+                $params[] = $_POST["cStatusDateTimeFROM"];
+            }
+            if ($_POST["cStatusDateTimeTO"] != "") {
+                $sql .= " cStatusDateTimeTO=? AND";
+                $params[] = $_POST["cStatusDateTimeTO"];
+            }
+    }else {
+        $sql = $queries[$sqlID]->sql;
+        $i = 0;
+        $params = array();
+        foreach (array_keys($queries[$sqlID]->params) as $param) {
+            $params[$i] = $_POST[$param];
+            $i++;
+        }
     }
-    //var_dump($sql);
-    //var_dump($_POST);
-    //var_dump($params);
+
+    var_dump($sql);
+    var_dump($_POST);
+    var_dump($params);
+
 
     $stmt = sqlsrv_query($conn, $sql, $params);
     if ($stmt === false) {

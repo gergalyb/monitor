@@ -35,9 +35,19 @@ function makeQueryElement ($category){
                 $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key'>";
             $output[$category] = $output[$category] . "</div>";
         }
+        elseif ($objQuery->params[$key] == "datetime") {
+            $output[$category] = $output[$category] . "<div class='form-group'>";
+                $output[$category] = $output[$category] . "<input type='datetime-local' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+            $output[$category] = $output[$category] . "</div>";
+        }
         elseif ($objQuery->params[$key] == "text") {
             $output[$category] = $output[$category] . "<div class='form-group'>";
                 $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+            $output[$category] = $output[$category] . "</div>";
+        }
+        elseif ($objQuery->params[$key] == "textarea") {
+            $output[$category] = $output[$category] . "<div class='form-group'>";
+                $output[$category] = $output[$category] . "<textarea rows='4' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'></textarea>";
             $output[$category] = $output[$category] . "</div>";
         }
     }

@@ -49,3 +49,8 @@
   overflow: auto;
   background-color: rgb(207, 207, 207);
 }
+
+textarea{
+    height: 100px;
+    width: 100%;
+}

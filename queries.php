@@ -72,15 +72,36 @@ $test4 = new query();
         "dateTo"=>"date"
     );
 
-$queries = array($test,$test2,$test3,$test4);
+$complex = new query();
+    $complex->name = "complexQuery";
+    $complex->publicName = "Komplex lekérdezés";
+    $complex->sql = "";
+    $complex->category = "complex";
+    $complex->params = array(
+        "cMsgID"=>"text",
+        "cDocType"=>"text",
+        "cOriginalFilename"=>"textarea",
+        "cSubAddress1"=>"text",
+        "cRecipientID"=>"dropdown",
+        "cSenderID"=>"dropdown",
+        "cStatus"=>"dropdown",
+        "cStatusDateTimeFROM"=>"datetime",
+        "cStatusDateTimeTO"=>"datetime"
+    );
+
+$queries = array($test,$test2,$test3,$test4,$complex);
 
 $categoryPublicName = array(
     "normal" => "Normális lekérdezések",
-    "quick" => "Gyors lekérdezések"
+    "quick" => "Gyors lekérdezések",
+    "complex" => "Komplex lekérdezések"
 );
 
 $paramsPublicName = array(
     "dateFrom" => "Kezdő dátum",
-    "dateTo" => "Bezáró dátum"
+    "dateTo" => "Bezáró dátum",
+    "cMsgID" => "Üzenet ID",
+    "cDocType"=>"Dokumentum típus",
+    "cOriginalFilename"=>"Eredeti fájlnév"
 );
 ?>
