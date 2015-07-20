@@ -31,7 +31,7 @@ if ($submitted == true) {
                 $data = explode("\n", $_POST["cOriginalFilename"]);
                 var_dump($data);
                     if (count($data) == 1) {
-                        $sql .= " (cOriginalFilename LIKE '%'+?+'%')";
+                        $sql .= " (cOriginalFilename LIKE '%'+?+'%') AND";
                         $params[] = $data[0];
                     } else {
                         $sql .= " (";
@@ -39,7 +39,7 @@ if ($submitted == true) {
                             $sql .= "cOriginalFilename LIKE %?% OR ";
                             $params = $dataElement;
                         }
-                        $sql .= "false)";
+                        $sql .= "false) AND";
                     }
             }
             if ($_POST["cSubAddress1"] != "") {
@@ -59,13 +59,14 @@ if ($submitted == true) {
                 $params[] = $_POST["cStatus"];
             }
             if ($_POST["cStatusDateTimeFROM"] != "") {
-                $sql .= " cStatusDateTimeFROM=? AND";
+                $sql .= " cStatusDateTime > ? AND";
                 $params[] = $_POST["cStatusDateTimeFROM"];
             }
             if ($_POST["cStatusDateTimeTO"] != "") {
-                $sql .= " cStatusDateTimeTO=? AND";
+                $sql .= " cStatusDateTime < ? AND";
                 $params[] = $_POST["cStatusDateTimeTO"];
             }
+            $sql .= " 1=1";
     }else {
         $sql = $queries[$sqlID]->sql;
         $i = 0;
@@ -121,7 +122,11 @@ if ($submitted == true) {
                             echo "<td><span class='mdi-navigation-close'></span></td>";
                         }
                         else {
-                            echo "<td>" . $rowData . "</td>";
+                            if (gettype($rowData) == "object") {
+                                echo "<td>" . $rowData->format('Y-m-d H:i:s') . "</td>";
+                            } else {
+                                echo "<td>" . $rowData . "</td>";
+                            }
                         }
                     }
                 echo "</tr>";

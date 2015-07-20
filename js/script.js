@@ -9,5 +9,10 @@ document.addEventListener('DOMContentLoaded', function(){
     orientation: "top right",
     autoclose: true,
     todayHighlight: true
-});
+    });
+
+    $(function () {
+    $('#datetimepicker').datetimepicker();
+    $('#datetimepicker').data("DateTimePicker").format('YYYY-MM-DD HH:mm:ss');
+    });
 }, false)

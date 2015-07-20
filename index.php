@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="./bootstrap/material/css/ripples.css">
     <link rel="stylesheet" href="./bootstrap/material/css/roboto.css">
     <link rel="stylesheet" href="./bootstrap/datepicker/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="./bootstrap/datetimepicker/css/bootstrap-datetimepicker.css">
 
     <script type="text/javascript" src="./js/script.js"></script>
     <script type="text/javascript" src="./bootstrap/js/jquery-2.1.4.min.js"></script>
@@ -24,6 +25,8 @@
     <script type="text/javascript" src="./bootstrap/material/js/ripples.min.js"></script>
     <script type="text/javascript" src="./bootstrap/datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="./bootstrap/datepicker/locales/bootstrap-datepicker.hu.min.js"></script>
+    <script type="text/javascript" src="./bootstrap/datetimepicker/js/moment.js"></script>
+    <script type="text/javascript" src="./bootstrap/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
     <title>Dreher üzenetforgalom monitoring</title>
 </head>

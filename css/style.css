@@ -3,7 +3,7 @@
     top: 50px;
     right: 0px;
     bottom: 0px;
-    left: 400px;
+    left: 300px;
   overflow: auto;
   padding: 15px;
 }
@@ -45,7 +45,7 @@
     top: 50px;
     left: 0px;
     bottom: 0px;
-    width: 400px;
+    width: 300px;
   overflow: auto;
   background-color: rgb(207, 207, 207);
 }

@@ -79,7 +79,7 @@ $complex = new query();
     $complex->category = "complex";
     $complex->params = array(
         "cMsgID"=>"text",
-        "cDocType"=>"text",
+        "cDocType"=>"dropdown",
         "cOriginalFilename"=>"textarea",
         "cSubAddress1"=>"text",
         "cRecipientID"=>"dropdown",
@@ -88,6 +88,7 @@ $complex = new query();
         "cStatusDateTimeFROM"=>"datetime",
         "cStatusDateTimeTO"=>"datetime"
     );
+
 
 $queries = array($test,$test2,$test3,$test4,$complex);
 
@@ -102,6 +103,45 @@ $paramsPublicName = array(
     "dateTo" => "Bezáró dátum",
     "cMsgID" => "Üzenet ID",
     "cDocType"=>"Dokumentum típus",
-    "cOriginalFilename"=>"Eredeti fájlnév"
+    "cOriginalFilename"=>"Eredeti fájlnév",
+    "cSubAddress1"=>"cím1",
+    "cRecipientID"=>"Fogadó ID",
+    "cSenderID"=>"Küldő ID",
+    "cStatus"=>"Státusz",
+    "cStatusDateTimeFROM"=>"status datetime from",
+    "cStatusDateTimeTO"=>"status datetime to"
 );
+
+$dropdownData["cDocType"] = array(
+    "ORDERS"=>"Order",
+    "ORDPDF"=>"Warehouse movement",
+    "ORDRSP"=>"Order response",
+    "INVOIC"=>"Invoic",
+    "INVCRE"=>"Credit memo",
+    "INVDEB"=>"Debit memo",
+    "CUSMAS"=>"Customer master",
+    "MATMAS"=>"Material master",
+    "MATSET"=>"Material set",
+    "EXCAUT"=>"Excise authorization",
+    "KOROSI"=>"Stock aging"
+);
+$dropdownData["cStatus"] = array(
+    "0"=>"Pending",
+    "1"=>"Imported",
+    "2"=>"Downloaded",
+    "3"=>"Deleted",
+    "4"=>"Uploaded",
+    "5"=>"Exported",
+    "6"=>"Checked"
+);
+$stmt = sqlsrv_query($conn, "select cPartnerID, cPartnerName from tPartnerMaster order by cPartnerName");
+if ($stmt === false) {
+die(print_r(sqlsrv_errors(), true));
+}
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+    $rowValues = array_values($row);
+    $dropdownData["cRecipientID"][$rowValues[0]] = $rowValues[1];
+    $dropdownData["cSenderID"][$rowValues[0]] = $rowValues[1];
+}
+
 ?>

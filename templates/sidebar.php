@@ -24,35 +24,46 @@ function makeQueryElement ($category){
     global $objQuery;
     global $paramsKeys;
     global $paramsPublicName;
+    global $dropdownData;
     if (!isset($output[$category])){
         $output[$category] = "";
     }
-    $output[$category] = $output[$category] . "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
-    $output[$category] = $output[$category] . "<h4>" . $objQuery->publicName . "</h4>";
+    $output[$category] .= "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
+    $output[$category] .= "<h4>" . $objQuery->publicName . "</h4>";
     foreach ($paramsKeys as $key) {
         if ($objQuery->params[$key] == "date"){
-            $output[$category] = $output[$category] . "<div class='date-input form-group'>";
-                $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key'>";
-            $output[$category] = $output[$category] . "</div>";
+            $output[$category] .= "<div class='date-input form-group'>";
+                $output[$category] .= "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' id='date-input' name='$key'>";
+            $output[$category] .= "</div>";
         }
         elseif ($objQuery->params[$key] == "datetime") {
-            $output[$category] = $output[$category] . "<div class='form-group'>";
-                $output[$category] = $output[$category] . "<input type='datetime-local' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
-            $output[$category] = $output[$category] . "</div>";
+            $output[$category] .= "<div class='form-group'>";
+                $output[$category] .= "<input type='text' id='datetimepicker' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+            $output[$category] .= "</div>";
         }
         elseif ($objQuery->params[$key] == "text") {
-            $output[$category] = $output[$category] . "<div class='form-group'>";
-                $output[$category] = $output[$category] . "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
-            $output[$category] = $output[$category] . "</div>";
+            $output[$category] .= "<div class='form-group'>";
+                $output[$category] .= "<input type='text' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+            $output[$category] .= "</div>";
         }
         elseif ($objQuery->params[$key] == "textarea") {
-            $output[$category] = $output[$category] . "<div class='form-group'>";
-                $output[$category] = $output[$category] . "<textarea rows='4' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'></textarea>";
-            $output[$category] = $output[$category] . "</div>";
+            $output[$category] .= "<div class='form-group'>";
+                $output[$category] .= "<textarea rows='4' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'></textarea>";
+            $output[$category] .= "</div>";
+        }
+        elseif ($objQuery->params[$key] == "dropdown") {
+            $output[$category] .= "<div class='form-group'>";
+                $output[$category] .= "<select class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+                $output[$category] .= "<option value=''></option>";
+                foreach ($dropdownData[$key] as $dropdownValue => $dropdownName) {
+                    $output[$category] .= "<option value='$dropdownValue'>$dropdownName</option>";
+                }
+                $output[$category] .= "</select>";
+            $output[$category] .= "</div>";
         }
     }
-    $output[$category] = $output[$category] . "<input type='submit' value='Lekérdezés indítása' class='btn btn-flat btn-default' name='$objQuery->name'>";
-    $output[$category] = $output[$category] . "</form>";
+    $output[$category] .= "<input type='submit' value='Lekérdezés indítása' class='btn btn-flat btn-default' name='$objQuery->name'>";
+    $output[$category] .= "</form>";
 }
 
 echo "<div id='sidebar'>";
