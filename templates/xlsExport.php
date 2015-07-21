@@ -1,7 +1,13 @@
 <?php
-require '../queries.php';
 require '../config/conn.php';
-$sql = $queries[$_GET['sqlID']]->sql;
+require '../queries.php';
+
+if (!isset($_GET["sqlID"]) || $queries[$_GET['sqlID']]->sql == "") {
+    $sql = json_decode(base64_decode($_GET['sql']));
+} else {
+    $sql = $queries[$_GET['sqlID']]->sql;
+}
+
 $params = json_decode(base64_decode($_GET['params']));
 
 //var_dump($sql);
@@ -25,14 +31,19 @@ $row = 2;
 while ($rowData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $col = 0;
     foreach ($rowData as $data) {
-        $xls->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row, $data);
+        if (gettype($data) == "object") {
+            $xls->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row, $data->format('Y-m-d H:i:s'));
+        } else {
+            $xls->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row, $data);
+        }
         $col++;
     }
     $row++;
 }
 
+$fileName = $_GET["filename"];
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="01simple.xls"');
+header("Content-Disposition: attachment;filename=$fileName");
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
 $objWriter->save('php://output');

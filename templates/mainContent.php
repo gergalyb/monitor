@@ -24,7 +24,7 @@ if ($submitted == true) {
                 $params[] = $_POST["cMsgID"];
             }
             if ($_POST["cDocType"] != "") {
-                $sql .= "cDocType =? AND";
+                $sql .= " cDocType =? AND";
                 $params[] = $_POST["cDocType"];
             }
             if ($_POST["cOriginalFilename"] != "") {
@@ -82,17 +82,35 @@ if ($submitted == true) {
     var_dump($params);
 
 
-    $stmt = sqlsrv_query($conn, $sql, $params);
+    $options = array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+    $stmt = sqlsrv_query($conn, $sql, $params, $options);
     if ($stmt === false) {
     die(print_r(sqlsrv_errors(), true));
     }
     $metadata = sqlsrv_field_metadata($stmt);
+    $rowCount = sqlsrv_num_rows($stmt);
 
     echo "<h4 class='queryName'>" . $queries[$sqlID]->publicName . "</h4>";
-    echo "<a class='btn btn-raised btn-default' data-toggle='tooltip' data-placement='right' type='button' title='' data-original-title='Letöltés Excel formátumban' href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=" . base64_encode(json_encode($params)) . "'>
-            <img src='./excel_logo.gif' alt='Excel letöltés' height='30px'>
-        </a>
-        <br />";
+    if ($rowCount == 0) {
+        echo "<div class='alert alert-danger'>
+            No results found!
+            </div>";
+    } elseif ($rowCount < 65535) {
+        echo "<div class='alert alert-success'>
+            Query successful!<br>Number of rows: $rowCount
+            </div>";
+        echo "<a class='btn btn-raised btn-default' type='button'
+                href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=" . base64_encode(json_encode($params)) . "&sql=" . base64_encode(json_encode($sql)) . "&filename=BNDocExchange_" . $queries[$sqlID]->publicName . "_" . time() . ".xls" . "'>
+                <img src='./excel_logo.gif' alt='Excel letöltés' height='30px'>
+            </a>
+            <br>";
+    } elseif ($rowCount >= 65535) {
+        echo "<div class='alert alert-warning'>
+            Query successful!<br>Number of rows: $rowCount
+            <br>Excel supports a maximum of 65535 rows. Excel export unavailable.
+            </div>";
+    }
+
 
     echo "<table id='table' class='table table-striped text-center'>";
         echo "<thead class>";
@@ -103,7 +121,6 @@ if ($submitted == true) {
             echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
-
             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
                 if (array_search("SUCCESS", $row) != false) {
                     echo "<tr class='success'>";
@@ -128,6 +145,9 @@ if ($submitted == true) {
                                 echo "<td>" . $rowData . "</td>";
                             }
                         }
+                    }
+                    if (isset($row["cMsgID"])) {
+                        echo "<td><a href='#' onclick='window.open(\"/monitor/templates/history.php?cMsgID=" . $row["cMsgID"] . "\", \"history\", \"status=1, toolbar=1 width=800px, height=400px\")'>History</a></td>";
                     }
                 echo "</tr>";
             }
