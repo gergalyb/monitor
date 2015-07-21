@@ -4,7 +4,7 @@ echo "<div id='mainContent'>";
 $i = 0;
 $submitted = false;
 foreach ($queries as $objQuery) {
-    if (!empty($_POST[$objQuery->name])){
+    if (!empty($_GET[$objQuery->name])){
         $submitted = true;
         $sqlID = $i;
     }
@@ -19,16 +19,17 @@ if ($submitted == true) {
                 cMsgID, cDocType, cOriginalFilename, cSubAddress1, cRecipientID, cSenderID , cStatus, cStatusDateTime
                 from tMessages
                 where";
-            if ($_POST["cMsgID"] != "") {
+            if ($_GET["cMsgID"] != "") {
                 $sql .= " cMsgID=? AND";
-                $params[] = $_POST["cMsgID"];
+                $params[] = $_GET["cMsgID"];
             }
-            if ($_POST["cDocType"] != "") {
+            if ($_GET["cDocType"] != "") {
                 $sql .= " cDocType =? AND";
-                $params[] = $_POST["cDocType"];
+                $params[] = $_GET["cDocType"];
             }
-            if ($_POST["cOriginalFilename"] != "") {
-                $data = explode("\n", $_POST["cOriginalFilename"]);
+            if ($_GET["cOriginalFilename"] != "") {
+                var_dump($_GET["cOriginalFilename"]);
+                $data = explode("\r\n", $_GET["cOriginalFilename"]);
                 var_dump($data);
                     if (count($data) == 1) {
                         $sql .= " (cOriginalFilename LIKE '%'+?+'%') AND";
@@ -36,35 +37,35 @@ if ($submitted == true) {
                     } else {
                         $sql .= " (";
                         foreach ($data as $dataElement) {
-                            $sql .= "cOriginalFilename LIKE %?% OR ";
-                            $params = $dataElement;
+                            $sql .= "cOriginalFilename LIKE '%'+?+'%' OR ";
+                            $params[] = $dataElement;
                         }
-                        $sql .= "false) AND";
+                        $sql .= "0=1) AND";
                     }
             }
-            if ($_POST["cSubAddress1"] != "") {
+            if ($_GET["cSubAddress1"] != "") {
                 $sql .= " cSubAddress1=? AND";
-                $params[] = $_POST["cSubAddress1"];
+                $params[] = $_GET["cSubAddress1"];
             }
-            if ($_POST["cRecipientID"] != "") {
+            if ($_GET["cRecipientID"] != "") {
                 $sql .= " cRecipientID=? AND";
-                $params[] = $_POST["cRecipientID"];
+                $params[] = $_GET["cRecipientID"];
             }
-            if ($_POST["cSenderID"] != "") {
+            if ($_GET["cSenderID"] != "") {
                 $sql .= " cSenderID=? AND";
-                $params[] = $_POST["cSenderID"];
+                $params[] = $_GET["cSenderID"];
             }
-            if ($_POST["cStatus"] != "") {
+            if ($_GET["cStatus"] != "") {
                 $sql .= " cStatus=? AND";
-                $params[] = $_POST["cStatus"];
+                $params[] = $_GET["cStatus"];
             }
-            if ($_POST["cStatusDateTimeFROM"] != "") {
+            if ($_GET["cStatusDateTimeFROM"] != "") {
                 $sql .= " cStatusDateTime > ? AND";
-                $params[] = $_POST["cStatusDateTimeFROM"];
+                $params[] = $_GET["cStatusDateTimeFROM"];
             }
-            if ($_POST["cStatusDateTimeTO"] != "") {
+            if ($_GET["cStatusDateTimeTO"] != "") {
                 $sql .= " cStatusDateTime < ? AND";
-                $params[] = $_POST["cStatusDateTimeTO"];
+                $params[] = $_GET["cStatusDateTimeTO"];
             }
             $sql .= " 1=1";
     }else {
@@ -72,13 +73,13 @@ if ($submitted == true) {
         $i = 0;
         $params = array();
         foreach (array_keys($queries[$sqlID]->params) as $param) {
-            $params[$i] = $_POST[$param];
+            $params[$i] = $_GET[$param];
             $i++;
         }
     }
 
     var_dump($sql);
-    var_dump($_POST);
+    var_dump($_GET);
     var_dump($params);
 
 
@@ -90,6 +91,16 @@ if ($submitted == true) {
     $metadata = sqlsrv_field_metadata($stmt);
     $rowCount = sqlsrv_num_rows($stmt);
 
+    $rowsPerPage = 200;
+    if (isset($_GET["page"])) {
+        $page = $_GET["page"];
+    } else {
+        $page = 0;
+    }
+
+    sqlsrv_fetch($stmt,SQLSRV_SCROLL_ABSOLUTE,$page*$rowsPerPage-1);
+
+
     echo "<h4 class='queryName'>" . $queries[$sqlID]->publicName . "</h4>";
     if ($rowCount == 0) {
         echo "<div class='alert alert-danger'>
@@ -100,7 +111,7 @@ if ($submitted == true) {
             Query successful!<br>Number of rows: $rowCount
             </div>";
         echo "<a class='btn btn-raised btn-default' type='button'
-                href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=" . base64_encode(json_encode($params)) . "&sql=" . base64_encode(json_encode($sql)) . "&filename=BNDocExchange_" . $queries[$sqlID]->publicName . "_" . time() . ".xls" . "'>
+                href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=" . base64_encode(json_encode($params)) . "&sql=" . base64_encode(json_encode($sql)) . "&filename=BNDocExchange_" . $queries[$sqlID]->publicName . "_" . time() . "'>
                 <img src='./excel_logo.gif' alt='Excel letöltés' height='30px'>
             </a>
             <br>";
@@ -111,6 +122,21 @@ if ($submitted == true) {
             </div>";
     }
 
+    foreach ($_GET as $key => $value) {
+        if ($key != "page") {
+            $GETParams[$key] = $value;
+        }
+    }
+    echo "<ul class='pagination pagination-sm'>";
+    for ($i=0; $i <= $rowCount/$rowsPerPage; $i++) {
+        echo "<li><a href=./index.php?";
+        foreach ($GETParams as $key => $value) {
+            echo "$key=$value&";
+        }
+        echo "page=$i";
+        echo "'>" . strval(intval($i)+1) . "</a></li>";
+    }
+    echo "</ul>";
 
     echo "<table id='table' class='table table-striped text-center'>";
         echo "<thead class>";
@@ -121,7 +147,8 @@ if ($submitted == true) {
             echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
-            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+            $i=0;
+            while (($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC))  && $i < $rowsPerPage){
                 if (array_search("SUCCESS", $row) != false) {
                     echo "<tr class='success'>";
                 }
@@ -150,6 +177,7 @@ if ($submitted == true) {
                         echo "<td><a href='#' onclick='window.open(\"/monitor/templates/history.php?cMsgID=" . $row["cMsgID"] . "\", \"history\", \"status=1, toolbar=1 width=800px, height=400px\")'>History</a></td>";
                     }
                 echo "</tr>";
+                $i++;
             }
         echo "</tbody>";
     echo "</table>";

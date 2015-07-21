@@ -13,6 +13,7 @@ $params = json_decode(base64_decode($_GET['params']));
 //var_dump($sql);
 //var_dump($params);
 
+$options = array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
 $stmt = sqlsrv_query($conn, $sql, $params);
 if ($stmt === false) {
 die(print_r(sqlsrv_errors(), true));
@@ -43,7 +44,7 @@ while ($rowData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 
 $fileName = $_GET["filename"];
 header('Content-Type: application/vnd.ms-excel');
-header("Content-Disposition: attachment;filename=$fileName");
+header("Content-Disposition: attachment;filename=$fileName" . ".xls");
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
 $objWriter->save('php://output');

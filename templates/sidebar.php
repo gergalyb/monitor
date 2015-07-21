@@ -28,7 +28,7 @@ function makeQueryElement ($category){
     if (!isset($output[$category])){
         $output[$category] = "";
     }
-    $output[$category] .= "<form class='form-horizontal jumbotron' method='POST' action=" . $_SERVER['PHP_SELF'] . ">";
+    $output[$category] .= "<form class='form-horizontal jumbotron' method='GET' action=" . $_SERVER['PHP_SELF'] . ">";
     $output[$category] .= "<h4>" . $objQuery->publicName . "</h4>";
     foreach ($paramsKeys as $key) {
         if ($objQuery->params[$key] == "date"){
