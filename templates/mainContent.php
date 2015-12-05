@@ -78,9 +78,9 @@ if ($submitted == true) {
         }
     }
 
-    var_dump($sql);
-    var_dump($_GET);
-    var_dump($params);
+    //var_dump($sql);
+    //var_dump($_GET);
+    //var_dump($params);
 
 
     $options = array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
@@ -104,11 +104,11 @@ if ($submitted == true) {
     echo "<h4 class='queryName'>" . $queries[$sqlID]->publicName . "</h4>";
     if ($rowCount == 0) {
         echo "<div class='alert alert-danger'>
-            No results found!
+            Nincs találat!
             </div>";
     } elseif ($rowCount < 65535) {
         echo "<div class='alert alert-success'>
-            Query successful!<br>Number of rows: $rowCount
+            Sikeres lekérdezés!<br>Sorok száma: $rowCount
             </div>";
         echo "<a class='btn btn-raised btn-default' type='button'
                 href='./templates/xlsExport.php?sqlID=" . $sqlID . "&params=" . base64_encode(json_encode($params)) . "&sql=" . base64_encode(json_encode($sql)) . "&filename=BNDocExchange_" . $queries[$sqlID]->publicName . "_" . time() . "'>
@@ -117,8 +117,8 @@ if ($submitted == true) {
             <br>";
     } elseif ($rowCount >= 65535) {
         echo "<div class='alert alert-warning'>
-            Query successful!<br>Number of rows: $rowCount
-            <br>Excel supports a maximum of 65535 rows. Excel export unavailable.
+            Sikeres lekérdezés!<br>Sorok száma: $rowCount
+            <br>Az Excel maximum 65535 sort támogat. Excel exportálás nem elérhető.
             </div>";
     }
 
@@ -139,7 +139,7 @@ if ($submitted == true) {
     echo "</ul>";
 
     echo "<table id='table' class='table table-striped text-center'>";
-        echo "<thead class>";
+        echo "<thead>";
             echo "<tr>";
                 foreach ($metadata as $columnMeta) {
                     echo "<th class='text-center'>" . $columnMeta['Name'] . "</th>";
@@ -182,7 +182,89 @@ if ($submitted == true) {
         echo "</tbody>";
     echo "</table>";
 } else {
-    echo "<div class='well'>Az eredmények itt fognak megjelenni.</div>";
+    $sql = "select cStatus, count(cID)
+            from tMessages
+            where
+            cStatus in (0,1,4) and
+            datediff(n,cStatusDateTime,getdate())>15
+            group by cStatus
+            order by cStatus";
+
+    $params = array(0=>0);
+    $options = array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+    $stmt = sqlsrv_query($conn, $sql,$params,$options);
+    if ($stmt === false) {
+    die(print_r(sqlsrv_errors(), true));
+    }
+    echo "
+        <table class='table'>
+            <thead>";
+                if (sqlsrv_num_rows($stmt) == 0)
+                {
+                    echo "
+                        <tr class='success'>
+                            <th>Általános státusz:</th>
+                            <th>Minden OK</th>
+                        </tr>";
+                } else {
+                    echo "
+                        <tr class='danger'>
+                            <th>Általános státusz:</th>
+                            <th>Riasztás</th>
+                        </tr>";
+                }
+                $values = array_fill(0,10,0);
+                while ($row = sqlsrv_fetch_array($stmt)) {
+                    $values[$row[0]] = $row[1];
+                }
+            echo "
+            </thead>
+            <tbody>";
+                if ($values[0] == 0) {
+                    echo "
+                        <tr class='success'>
+                            <td>Importálási állapot:</td>
+                            <td>Minden OK</td>
+                        </tr>";
+                } else {
+                    echo "
+                        <tr class='danger'>
+                            <td>Importálási állapot:</td>
+                            <td>" . $values[0] . " db üzenet várakozik</td>
+                        </tr>";
+                }
+
+                if ($values[1] == 0) {
+                    echo "
+                        <tr class='success'>
+                            <td>Kézbesítési állapot:</td>
+                            <td>Minden OK</td>
+                        </tr>";
+                } else {
+                    echo "
+                        <tr class='danger'>
+                            <td>Kézbesítési állapot:</td>
+                            <td>" . $values[1] . " db üzenet várakozik</td>
+                        </tr>";
+                }
+
+                if ($values[4] == 0) {
+                    echo "
+                        <tr class='success'>
+                            <td>Exportálási állapot:</td>
+                            <td>Minden OK</td>
+                        </tr>";
+                } else {
+                    echo "
+                        <tr class='danger'>
+                            <td>Exportálási állapot:</td>
+                            <td>" . $values[4] . " db üzenet várakozik</td>
+                        </tr>";
+                }
+        echo "
+            </tbody>
+        </table>
+    ";
 }
 echo "</div>";
 ?>

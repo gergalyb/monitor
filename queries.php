@@ -37,41 +37,6 @@ $test2 = new query();
         group by right(cTriggerName,2) , cState";
     $test2->category = "quick";
 
-
-$test3 = new query();
-    $test3->id = 2;
-    $test3->name = "testQuery3";
-    $test3->publicName = "Teszt lekérdezés3";
-    $test3->sql =
-        "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
-        from BNDOCEX2TLOG
-        where
-        StartTime > ? and
-        StartTime < dateadd(d,1,?)
-        group by right(cTriggerName,2) , cState";
-    $test3->category = "normal";
-    $test3->params = array(
-        "dateFrom"=>"date",
-        "dateTo"=>"date"
-    );
-
-$test4 = new query();
-    $test4->id = 3;
-    $test4->name = "testQuery4";
-    $test4->publicName = "Teszt lekérdezés4";
-    $test4->sql =
-        "select COUNT(cTriggerName) as Darab, cState as Status, right(cTriggerName,2) as DepotCode
-        from BNDOCEX2TLOG
-        where
-        StartTime > ? and
-        StartTime < dateadd(d,1,?)
-        group by right(cTriggerName,2) , cState";
-    $test4->category = "normal";
-    $test4->params = array(
-        "dateFrom"=>"date",
-        "dateTo"=>"date"
-    );
-
 $complex = new query();
     $complex->name = "complexQuery";
     $complex->publicName = "Komplex lekérdezés";
@@ -90,10 +55,9 @@ $complex = new query();
     );
 
 
-$queries = array($test,$test2,$test3,$test4,$complex);
+$queries = array($test,$test2,$complex);
 
 $categoryPublicName = array(
-    "normal" => "Normális lekérdezések",
     "quick" => "Gyors lekérdezések",
     "complex" => "Komplex lekérdezések"
 );

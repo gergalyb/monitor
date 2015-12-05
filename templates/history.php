@@ -44,11 +44,11 @@ $rowCount = sqlsrv_num_rows($stmt);
 //echo "<h4 class='queryName'>" . $queries[$sqlID]->publicName . "</h4>";
 if ($rowCount == 0) {
     echo "<div class='alert alert-danger'>
-        No results found!
+        Nincs találat!
         </div>";
 } elseif ($rowCount < 65535) {
     echo "<div class='alert alert-success'>
-        Query successful!<br>Number of rows: $rowCount
+        Sikeres lekérdezés!<br>Sorok száma: $rowCount
         </div>";
     echo "<a class='btn btn-raised btn-default' type='button'
             href='./xlsExport.php?params=" . base64_encode(json_encode($params)) . "&sql=" . base64_encode(json_encode($sql)) . "&filename=History_of_cMsgId_" . $_GET["cMsgID"] . "_" . time() . ".xls" . "'>
@@ -57,8 +57,8 @@ if ($rowCount == 0) {
         <br>";
 } elseif ($rowCount >= 65535) {
     echo "<div class='alert alert-warning'>
-        Query successful!<br>Number of rows: $rowCount
-        <br>Excel supports a maximum of 65535 rows. Excel export unavailable.
+        Sikeres lekérdezés!<br>Sorok száma: $rowCount
+        <br>Az Excel maximum 65535 sort támogat. Excel exportálás nem elérhető.
         </div>";
 }
 

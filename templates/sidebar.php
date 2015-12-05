@@ -38,7 +38,7 @@ function makeQueryElement ($category){
         }
         elseif ($objQuery->params[$key] == "datetime") {
             $output[$category] .= "<div class='form-group'>";
-                $output[$category] .= "<input type='text' id='datetimepicker' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
+                $output[$category] .= "<input type='text' id='datetimepicker_$key' class='form-control floating-label' placeholder='$paramsPublicName[$key]' name='$key'>";
             $output[$category] .= "</div>";
         }
         elseif ($objQuery->params[$key] == "text") {
